@@ -32,14 +32,18 @@ public class VolumeManager : MonoBehaviour
             musicInt = PlayerPrefs.GetInt(MusicPref);
             soundEffectsInt = PlayerPrefs.GetInt(SoundEffectsPref);
         }
+        SetValueToSound(soundEffectsInt, soundEffectsAudio);
+        SetValueToSound(musicInt, musicAudio);
+        SaveSoundSettings(soundEffectsInt, SoundEffectsPref);
+        SaveSoundSettings(musicInt, MusicPref);
     }
 
-    public void SaveSoundSettings()
+    public void SaveSoundSettings(int volumeInt, string soundName)
     {
-        PlayerPrefs.SetInt(MusicPref, musicInt);
-        PlayerPrefs.SetInt(SoundEffectsPref, soundEffectsInt);
+        PlayerPrefs.SetInt(soundName, volumeInt);
     }
 
+    /*
     void OnApplicationFocus(bool inFocus)
     {
         if (!inFocus)
@@ -47,50 +51,76 @@ public class VolumeManager : MonoBehaviour
             SaveSoundSettings();
         }
     }
+    */
 
-    public void UpdateSound()
+    public void UpdateSound(AudioSource[] sound, int musicalOrSoundInt, string soundName)
     {
-        if(soundEffectsAudio[0].volume == 1)
+     //   Debug.Log("Music value last=" + sound[0].volume);
+        if(sound[0].volume == 1)
         {
-            for (int i = 0; i < soundEffectsAudio.Length; i++)
-            {
-                soundEffectsAudio[i].volume = 0;
-            }
+            SetValueToSound(0, sound);
+            musicalOrSoundInt = 0;
         }
         else
         {
-            for (int i = 0; i < soundEffectsAudio.Length; i++)
-            {
-                soundEffectsAudio[i].volume = 1;
-            }
+            SetValueToSound(1, sound);
+            musicalOrSoundInt = 1;
+
         }
+        //     Debug.Log("Music value new =" + sound[0].volume);
+        Debug.Log("musicInt = " + musicalOrSoundInt);
+
+        
+        SaveSoundSettings(musicalOrSoundInt, soundName);
+        Debug.Log("ImportMusicInt =" + PlayerPrefs.GetInt(MusicPref));
+    
     }
 
-    public void UpdateMusic()
+  
+    private void SetValueToSound(int value, AudioSource[] arrAudio)
     {
-        if (musicInt == 1)
+        for (int i = 0; i < arrAudio.Length; i++)
         {
-
-            for (int i = 0; i < musicAudio.Length; i++)
-            {
-                musicAudio[i].volume = 0;
-            }
-        }
-        else
-        {
-            for (int i = 0; i < musicAudio.Length; i++)
-            {
-                musicAudio[i].volume = 1;
-            }
+            arrAudio[i].volume = value;
         }
     }
 
+    public void UpdateSoundsEffects()
+    {
+        UpdateSound(soundEffectsAudio, soundEffectsInt, SoundEffectsPref);
+    }
 
+    public void UpdateMusicsEffects()
+    {
+        UpdateSound(musicAudio, musicInt, MusicPref);
+     
+    }
+    /*
+  public void UpdateMusic()
+  {
+      if (musicInt == 1)
+      {
+
+          for (int i = 0; i < musicAudio.Length; i++)
+          {
+              musicAudio[i].volume = 0;
+          }
+      }
+      else
+      {
+          for (int i = 0; i < musicAudio.Length; i++)
+          {
+              musicAudio[i].volume = 1;
+          }
+      }
+  }
+
+  */
 
 
 }
-    
-    
-        
-    
+
+
+
+
 
