@@ -1,10 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+
+
+[SerializeField]
+public class Sound
+{
+    public static string SoundPref;
+    public int SoundInt;
+    public AudioSource[] SoundAudio;
+    public GameObject SoundOn;
+    public GameObject SoundOff;
+
+  
+}
+
 
 public class VolumeManager : MonoBehaviour
 {
+    Sound music = new Sound();
+
 
     private static readonly string FirstPlay = "FirstPlay";
     private static readonly string MusicPref = "MusicPref";
@@ -14,9 +29,16 @@ public class VolumeManager : MonoBehaviour
     
     public AudioSource[] musicAudio;
     public AudioSource[] soundEffectsAudio;
+
+    public GameObject musicOn;
+    public GameObject musicOff;
+    public GameObject soundOn;
+    public GameObject soundOff;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        
         firstPlayInt = PlayerPrefs.GetInt(FirstPlay);
 
         if(firstPlayInt == 0)
@@ -36,24 +58,36 @@ public class VolumeManager : MonoBehaviour
         SetValueToSound(musicInt, musicAudio);
         SaveSoundSettings(soundEffectsInt, SoundEffectsPref);
         SaveSoundSettings(musicInt, MusicPref);
+        SetStartIcon(musicOn, musicOff, musicInt);
+        SetStartIcon(soundOn, soundOff, soundEffectsInt);
     }
 
-    public void SaveSoundSettings(int volumeInt, string soundName)
+
+    //включение и выключение иконок звука в зависимости от сохранения музыки/звуков
+    private void SetStartIcon(GameObject active, GameObject disActive, int value) 
+    {
+        switch(value)
+        {
+            case 0:
+                disActive.SetActive(true);
+                active.SetActive(false);
+                return;
+            case 1:
+                disActive.SetActive(false);
+                active.SetActive(true);
+                return;
+        }
+    }
+
+
+    //сохранение значения включенности/выключенности звуков и музыки 
+    private void SaveSoundSettings(int volumeInt, string soundName) 
     {
         PlayerPrefs.SetInt(soundName, volumeInt);
     }
 
-    /*
-    void OnApplicationFocus(bool inFocus)
-    {
-        if (!inFocus)
-        {
-            SaveSoundSettings();
-        }
-    }
-    */
-
-    public void UpdateSound(AudioSource[] sound, int musicalOrSoundInt, string soundName)
+    //проверка звука у первого(читать любого) звука из массива и переключение его на противоположное значение
+    private void UpdateSound(AudioSource[] sound, int musicalOrSoundInt, string soundName)
     {
      //   Debug.Log("Music value last=" + sound[0].volume);
         if(sound[0].volume == 1)
@@ -68,15 +102,15 @@ public class VolumeManager : MonoBehaviour
 
         }
         //     Debug.Log("Music value new =" + sound[0].volume);
-        Debug.Log("musicInt = " + musicalOrSoundInt);
+  //      Debug.Log("musicInt = " + musicalOrSoundInt);
 
         
         SaveSoundSettings(musicalOrSoundInt, soundName);
-        Debug.Log("ImportMusicInt =" + PlayerPrefs.GetInt(MusicPref));
+    //    Debug.Log("ImportMusicInt =" + PlayerPrefs.GetInt(MusicPref));
     
     }
 
-  
+  //установка одного значения для всех элементов массива звуков
     private void SetValueToSound(int value, AudioSource[] arrAudio)
     {
         for (int i = 0; i < arrAudio.Length; i++)
@@ -84,7 +118,7 @@ public class VolumeManager : MonoBehaviour
             arrAudio[i].volume = value;
         }
     }
-
+    //открытые методы использования 
     public void UpdateSoundsEffects()
     {
         UpdateSound(soundEffectsAudio, soundEffectsInt, SoundEffectsPref);
@@ -95,30 +129,20 @@ public class VolumeManager : MonoBehaviour
         UpdateSound(musicAudio, musicInt, MusicPref);
      
     }
-    /*
-  public void UpdateMusic()
-  {
-      if (musicInt == 1)
-      {
 
-          for (int i = 0; i < musicAudio.Length; i++)
-          {
-              musicAudio[i].volume = 0;
-          }
-      }
-      else
-      {
-          for (int i = 0; i < musicAudio.Length; i++)
-          {
-              musicAudio[i].volume = 1;
-          }
-      }
-  }
-
-  */
-
+    public void PlayBoop()
+    {
+        PlayOneShoot(soundEffectsAudio, 0);
+    }
+    private void PlayOneShoot(AudioSource[] arrAudio, int index)
+    {
+        arrAudio[index].Play();
+    }
 
 }
+
+
+  
 
 
 
