@@ -25,13 +25,11 @@ public class LevelTable
 
 }
 */
+
+/*
 [System.Serializable]
-public class A
-{
-    public int k;
-}
-[System.Serializable] 
-public class Level: MonoBehaviour
+
+public class Levels: MonoBehaviour
 {
     public string maxStarOfLevel = "MaxStar";
     public string FirstPlay = "FirstPlay";
@@ -90,15 +88,16 @@ public class Level: MonoBehaviour
     }
 }
 
+*/
 public class LevelManager : MonoBehaviour
 {
     public int lalal; 
-    Level level = new Level();
+    //Level level = new Level();
 
 
     public void Touch()
     {
-        level.StarGenerated();
+     //   level.StarGenerated();
     }
 
 }
