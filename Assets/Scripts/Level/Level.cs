@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    private static readonly string maxStarOfLevel = "MaxStar";
-    private static readonly string FirstPlay = "FirstPlay";
+    public string maxStarOfLevel;
+    public string FirstPlay;
     public int countOfStar;
     public int countOfLevel;
 

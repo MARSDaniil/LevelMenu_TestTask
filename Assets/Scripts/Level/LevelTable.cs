@@ -7,14 +7,15 @@ public class LevelTable : MonoBehaviour
     private static readonly string StarCount = "StarCount";
     private static readonly string FirstPlay = "FirstPlay";
 
+    private static readonly int LenghtOfArr = 8;
 
     //public Button[] LevelsGameObject;
-    public GameObject[] LevelsGameObject;
-    private Level[] LevelsData;
+    public GameObject[] LevelsGameObject = new GameObject[LenghtOfArr];
+    private Level[] LevelsData = new Level[LenghtOfArr];
 
     public int summOfStars;
 
-    public Text countOfStars;
+    public Text countOfStarsText;
 
     private void Start()
     {
@@ -38,7 +39,7 @@ public class LevelTable : MonoBehaviour
 
     private void SaveStarCount()
     {
-        Debug.Log("u enter to save ");
+       // Debug.Log("u enter to save ");
         PlayerPrefs.SetInt(StarCount, summOfStars);
         if (PlayerPrefs.GetInt(FirstPlay) == 0)
         {
@@ -48,8 +49,10 @@ public class LevelTable : MonoBehaviour
 
     private void LateUpdate()
     {
-       // countOfStars.text = summOfStars.ToString();
-   //     countOfStars.text = LevelsData[0].countOfStar.ToString();
+     //   UpdateStarCount();
+      //  countOfStarsText.text = summOfStars.ToString();
+        //     countOfStars.text = LevelsData[0].countOfStar.ToString();
+    
     }
 
     private void GetStartDataFromLevels()
@@ -58,12 +61,25 @@ public class LevelTable : MonoBehaviour
         {
            // LevelsData[i] = LevelsGameObject[i].GetComponent<Level>();
             LevelsData[i] = LevelsGameObject[i].gameObject.GetComponent<Level>();
-            if (LevelsData[i] != null)
+            if (LevelsData[i] == null)
             {
-                Debug.Log("LevelData[" + i + "] = not null");
+                Debug.LogError("LevelData[" + i + "] == null");
             }
             
             //Debug.Log("count of Star = " + LevelsData[i].countOfStar);
         }
+    }
+
+    public void UpdateStarCount()
+    {
+        int countOfStarLocal = 0;
+        for (int i = 0; i < LevelsGameObject.Length; i++)
+        {
+            countOfStarLocal = countOfStarLocal + LevelsData[i].countOfStar;
+        }
+
+        summOfStars = countOfStarLocal;
+        SaveStarCount();
+        countOfStarsText.text = summOfStars.ToString() + "/20";
     }
 }
