@@ -3,22 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class VolumeManager : MonoBehaviour
+public class SoundMusicManger : MonoBehaviour
 {
- 
-
-
     private static readonly string FirstPlay = "FirstPlay";
-    private static readonly string MusicPref = "MusicPref";
-    private static readonly string SoundEffectsPref = "SoundEffectsPref";
+    public string SoundPref;
     private int firstPlayInt;
-    public int musicInt, soundEffectsInt;
+    public int soundInt;
     
-    public AudioSource[] musicAudio;
-    public AudioSource[] soundEffectsAudio;
+    public AudioSource[] soundAudio;
 
-    public GameObject musicOn;
-    public GameObject musicOff;
     public GameObject soundOn;
     public GameObject soundOff;
 
@@ -30,23 +23,22 @@ public class VolumeManager : MonoBehaviour
 
         if(firstPlayInt == 0)
         {
-            musicInt = 1;
-            soundEffectsInt = 1;
-            PlayerPrefs.SetInt(MusicPref, musicInt);
-            PlayerPrefs.SetInt(SoundEffectsPref, soundEffectsInt);
+            soundInt = 1;
+            PlayerPrefs.SetInt(SoundPref, soundInt);
+            
             PlayerPrefs.SetInt(FirstPlay, -1);
         }
         else
         {
-            musicInt = PlayerPrefs.GetInt(MusicPref);
-            soundEffectsInt = PlayerPrefs.GetInt(SoundEffectsPref);
+            soundInt = PlayerPrefs.GetInt(SoundPref);
+           
         }
-        SetValueToSound(soundEffectsInt, soundEffectsAudio);
-        SetValueToSound(musicInt, musicAudio);
-        SaveSoundSettings(soundEffectsInt, SoundEffectsPref);
-        SaveSoundSettings(musicInt, MusicPref);
-        SetStartIcon(musicOn, musicOff, musicInt);
-        SetStartIcon(soundOn, soundOff, soundEffectsInt);
+      
+        SetValueToSound(soundInt, soundAudio);
+    
+        SaveSoundSettings(soundInt, SoundPref);
+        SetStartIcon(soundOn, soundOff, soundInt);
+     
     }
 
 
@@ -74,7 +66,7 @@ public class VolumeManager : MonoBehaviour
     }
 
     //проверка звука у первого(читать любого) звука из массива и переключение его на противоположное значение
-    private void UpdateSound(AudioSource[] sound,  string soundName)
+    private void UpdateSound(AudioSource[] sound, string soundName)
     {
         int musicalOrSoundInt;
      //   Debug.Log("Music value last=" + sound[0].volume);
@@ -107,20 +99,17 @@ public class VolumeManager : MonoBehaviour
         }
     }
     //открытые методы использования 
-    public void UpdateSoundsEffects()
-    {
-        UpdateSound(soundEffectsAudio, SoundEffectsPref);
-    }
+
 
     public void UpdateMusicsEffects()
     {
-        UpdateSound(musicAudio, MusicPref);
+        UpdateSound(soundAudio, SoundPref);
      
     }
 
     public void PlayBoop()
     {
-        PlayOneShoot(soundEffectsAudio, 0);
+        PlayOneShoot(soundAudio, 0);
     }
     private void PlayOneShoot(AudioSource[] arrAudio, int index)
     {
