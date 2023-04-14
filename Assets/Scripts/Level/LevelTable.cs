@@ -19,12 +19,13 @@ public class LevelTable : MonoBehaviour
     public Text countOfStarsText;//вывод количества звезд
     public GameObject OpenNextTable;
     public GameObject CloseNextTable;
-    public Button NextTableBotton;
+ //   public Button NextTableBotton;
 
     private void Start()
     {
+      //  NextTableBotton.interactable = true;
         GetStartDataFromLevels(); //взятие начальных данных  
-
+        UpdateStarCount();
 
         int firstPlay;
         firstPlay = PlayerPrefs.GetInt(FirstPlay);
@@ -36,11 +37,15 @@ public class LevelTable : MonoBehaviour
 
         }
         else
-        {
+        {   
             summOfStars = PlayerPrefs.GetInt(StarCount);
+            if(summOfStars >= nextLevelStarCount)
+            {
+                SwitcherBottons(OpenNextTable, CloseNextTable);
+            }
         }
-        NextTableBotton.interactable = false;
-        UpdateStarCount();
+        
+    //    UpdateStarCount();
 
 
     }
@@ -89,7 +94,7 @@ public class LevelTable : MonoBehaviour
         if(countOfStarLocal >= nextLevelStarCount)
         {
             SwitcherBottons(OpenNextTable,CloseNextTable);
-            NextTableBotton.interactable = true;
+       //     NextTableBotton.interactable = true;
         }
         summOfStars = countOfStarLocal;
       //  Debug.Log("sum = " + countOfStarLocal);
@@ -99,6 +104,10 @@ public class LevelTable : MonoBehaviour
 
     private void ShowText()
     {
-        countOfStarsText.text = summOfStars.ToString() + "/20";
+        countOfStarsText.text = summOfStars.ToString() + "/"+ nextLevelStarCount;
+    }
+    private void Update()
+    {
+        ShowText();
     }
 }
